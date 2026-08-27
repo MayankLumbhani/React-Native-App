@@ -6,22 +6,25 @@ import {
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "../../config/env.js";
+import { toUserDTO } from "./auth.dto.js";
 
 export const registerUser = async (userData) => {
+  const existingUser = await findUserByEmail(userData.email);
 
-    const existingUser = await findUserByEmail(userData.email);
+if (existingUser) {
+  const error = new Error("User already exists");
+  error.statusCode = 409;
+  throw error;
+}
 
-    if (existingUser) {
-        throw new Error("User already exists");
-    }
+  const hashedPassword = await bcrypt.hash(userData.password, 12);
 
-    const hashedPassword = await bcrypt.hash(userData.password, 12);
+  const user = await createUser({
+    ...userData,
+    password: hashedPassword,
+  });
 
-    return createUser({
-        ...userData,
-        password: hashedPassword,
-    });
-
+  return toUserDTO(user);
 };
 
 export const loginUser = async (credentials) => {
@@ -40,16 +43,13 @@ export const loginUser = async (credentials) => {
     throw new Error("Invalid email or password");
   }
 
-  const token = jwt.sign(
-    { userId: user._id },
-    JWT_SECRET,
-    { expiresIn: "7d" }
-  );
+const token = jwt.sign(
+  { userId: user._id },
+  JWT_SECRET,
+  { expiresIn: "7d" }
+);
 
-  user.password = undefined;
-
-  return {
-    user,
-    token,
-  };
-};
+return {
+  user: toUserDTO(user),
+  token,
+};};
