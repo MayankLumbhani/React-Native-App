@@ -1,4 +1,5 @@
-import { createProperty, findPropertiesByOwner, findPropertyByIdAndOwner, updatePropertyByIdAndOwner, deletePropertyByIdAndOwner } from "./property.repository.js";
+import { createProperty, findPropertiesByOwner, findPropertyByIdAndOwner, updatePropertyByIdAndOwner, deletePropertyByIdAndOwner, addContactToProperty } from "./property.repository.js";
+import { findContactByIdAndUser, addPropertyToContact } from "../contact/contact.repository.js";
 
 export const createPropertyService = async (userId, propertyData) => {
   return await createProperty({
@@ -65,6 +66,26 @@ export const deletePropertyService = async (propertyId, userId) => {
     error.statusCode = 404;
     throw error;
   }
+
+  return property;
+};
+
+export const linkContactToPropertyService = async (propertyId, userId, contactId) => {
+  const contact = await findContactByIdAndUser(contactId, userId);
+  if (!contact) {
+    const error = new Error("Contact not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  const property = await addContactToProperty(propertyId, userId, contactId);
+  if (!property) {
+    const error = new Error("Property not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  await addPropertyToContact(contactId, userId, propertyId);
 
   return property;
 };

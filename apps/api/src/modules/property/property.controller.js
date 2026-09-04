@@ -1,4 +1,4 @@
-import { createPropertyService, getUserPropertiesService, getPropertyByIdService, updatePropertyService, deletePropertyService } from "./property.service.js";
+import { createPropertyService, getUserPropertiesService, getPropertyByIdService, updatePropertyService, deletePropertyService, linkContactToPropertyService } from "./property.service.js";
 
 export const createProperty = async (req, res, next) => {
   try {
@@ -76,6 +76,25 @@ export const deleteProperty = async (req, res, next) => {
     const property = await deletePropertyService(
       req.params.propertyId,
       req.user.userId
+    );
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        property,
+      },
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+export const linkContact = async (req, res, next) => {
+  try {
+    const property = await linkContactToPropertyService(
+      req.params.propertyId,
+      req.user.userId,
+      req.params.contactId
     );
 
     return res.status(200).json({

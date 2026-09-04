@@ -2,11 +2,13 @@ import { Router } from "express";
 import authRoutes from "../modules/auth/auth.routes.js";
 import { authenticate } from "../middleware/auth.middleware.js";
 import propertyRoutes from "../modules/property/property.routes.js";
+import contactRoutes from "../modules/contact/contact.routes.js";
 
 const router = Router();
 
 router.use("/auth", authRoutes);
 router.use("/properties", propertyRoutes);
+router.use("/contacts", contactRoutes);
 
 router.get("/protected", authenticate, (req, res) => {
   res.json({

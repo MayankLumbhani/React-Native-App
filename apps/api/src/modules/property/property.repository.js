@@ -23,3 +23,11 @@ export const updatePropertyByIdAndOwner = async (propertyId, userId, updateData)
 export const deletePropertyByIdAndOwner = async (propertyId, userId) => {
   return await Property.findOneAndDelete({ _id: propertyId, owner: userId });
 };
+
+export const addContactToProperty = async (propertyId, userId, contactId) => {
+  return await Property.findOneAndUpdate(
+    { _id: propertyId, owner: userId },
+    { $addToSet: { contacts: contactId } },
+    { new: true }
+  );
+};
