@@ -19,3 +19,7 @@ export const updatePropertyByIdAndOwner = async (propertyId, userId, updateData)
     { new: true, runValidators: true }
   );
 };
+
+export const deletePropertyByIdAndOwner = async (propertyId, userId) => {
+  return await Property.findOneAndDelete({ _id: propertyId, owner: userId });
+};

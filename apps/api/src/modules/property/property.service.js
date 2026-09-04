@@ -1,4 +1,4 @@
-import { createProperty, findPropertiesByOwner, findPropertyByIdAndOwner, updatePropertyByIdAndOwner } from "./property.repository.js";
+import { createProperty, findPropertiesByOwner, findPropertyByIdAndOwner, updatePropertyByIdAndOwner, deletePropertyByIdAndOwner } from "./property.repository.js";
 
 export const createPropertyService = async (userId, propertyData) => {
   return await createProperty({
@@ -47,6 +47,18 @@ export const updatePropertyService = async (propertyId, userId, body) => {
   }
 
   const property = await updatePropertyByIdAndOwner(propertyId, userId, updateData);
+
+  if (!property) {
+    const error = new Error("Property not found");
+    error.statusCode = 404;
+    throw error;
+  }
+
+  return property;
+};
+
+export const deletePropertyService = async (propertyId, userId) => {
+  const property = await deletePropertyByIdAndOwner(propertyId, userId);
 
   if (!property) {
     const error = new Error("Property not found");
