@@ -1,6 +1,9 @@
 import { registerUser, loginUser } from "./auth.service.js";
 
 export const register = async (req, res, next) => {
+
+  console.log("REGISTER API HIT");
+
   try {
     const user = await registerUser(req.body);
 
