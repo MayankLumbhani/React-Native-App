@@ -2,7 +2,7 @@ import { View, Text, TextInput, Pressable, StyleSheet } from "react-native";
 import { useState } from "react";
 import { router } from "expo-router";
 import { loginUser } from "../../src/api/auth.api";
-import { saveToken } from "../../src/storage/auth.storage";
+import { saveToken, removeToken } from "../../src/storage/auth.storage";
 
 export default function LoginScreen() {
 
@@ -45,77 +45,75 @@ export default function LoginScreen() {
     } catch (error) {
       console.log("Login failed:", error.message);
     }
-    console.log("Login failed:", error.message);
-  }
-};
+  };
 
-return (
-  <View style={styles.container} >
+  return (
+    <View style={styles.container} >
 
-    <View style={styles.logoContainer}>
-      {/* Logo will be added here */}
-    </View>
+      <View style={styles.logoContainer}>
+        {/* Logo will be added here */}
+      </View>
 
-    <Text style={styles.title}>Welcome back</Text>
+      <Text style={styles.title}>Welcome back</Text>
 
-    <Text style={styles.subtitle}>
-      Sign in to continue managing your properties.
-    </Text>
-
-    <View style={styles.form}>
-      <Text style={styles.label}>Email Address</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your email"
-        value={email}
-        onChangeText={setEmail}
-        keyboardType="email-address"
-        autoCapitalize="none"
-      />
-
-      {errors.email && (
-        <Text style={styles.errorText}>{errors.email}</Text>
-      )}
-
-      <Text style={styles.label}>Password</Text>
-
-      <TextInput
-        style={styles.input}
-        placeholder="Enter your password"
-        value={password}
-        onChangeText={setPassword}
-        secureTextEntry
-      />
-
-      {errors.password && (
-        <Text style={styles.errorText}>{errors.password}</Text>
-      )}
-
-      <Pressable style={styles.forgotPassword}>
-        <Text style={styles.forgotPasswordText}>
-          Forgot Password?
-        </Text>
-      </Pressable>
-
-      <Pressable style={styles.button} onPress={handleLogin}>
-        <Text style={styles.buttonText}>Sign In</Text>
-      </Pressable>
-    </View>
-
-    <View style={styles.registerContainer}>
-      <Text style={styles.registerText}>
-        Don't have an account?
+      <Text style={styles.subtitle}>
+        Sign in to continue managing your properties.
       </Text>
 
-      <Pressable onPress={() => router.push("/register")}>
-        <Text style={styles.registerLink}> Create account</Text>
-      </Pressable>
+      <View style={styles.form}>
+        <Text style={styles.label}>Email Address</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your email"
+          value={email}
+          onChangeText={setEmail}
+          keyboardType="email-address"
+          autoCapitalize="none"
+        />
+
+        {errors.email && (
+          <Text style={styles.errorText}>{errors.email}</Text>
+        )}
+
+        <Text style={styles.label}>Password</Text>
+
+        <TextInput
+          style={styles.input}
+          placeholder="Enter your password"
+          value={password}
+          onChangeText={setPassword}
+          secureTextEntry
+        />
+
+        {errors.password && (
+          <Text style={styles.errorText}>{errors.password}</Text>
+        )}
+
+        <Pressable style={styles.forgotPassword}>
+          <Text style={styles.forgotPasswordText}>
+            Forgot Password?
+          </Text>
+        </Pressable>
+
+        <Pressable style={styles.button} onPress={handleLogin}>
+          <Text style={styles.buttonText}>Sign In</Text>
+        </Pressable>
+      </View>
+
+      <View style={styles.registerContainer}>
+        <Text style={styles.registerText}>
+          Don't have an account?
+        </Text>
+
+        <Pressable onPress={() => router.push("/register")}>
+          <Text style={styles.registerLink}> Create account</Text>
+        </Pressable>
+      </View>
+
     </View>
-
-  </View>
-);
-
+  );
+}
 
 const styles = StyleSheet.create({
   container: {
